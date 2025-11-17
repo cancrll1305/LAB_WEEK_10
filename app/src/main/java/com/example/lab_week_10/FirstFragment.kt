@@ -7,43 +7,48 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.lab_week_10.viewmodels.TotalViewModel
 
 class FirstFragment : Fragment() {
 
+    private lateinit var viewModel: TotalViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Initialize the ViewModel
+        viewModel = ViewModelProvider(requireActivity()).get(TotalViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the fragment layout
         return inflater.inflate(R.layout.fragment_first, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        prepareViewModel()
+        // Start observing the LiveData
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        // Observe the LiveData object from the ViewModel
+        viewModel.total.observe(viewLifecycleOwner, { total ->
+            // Update the UI when the LiveData changes
+            updateText(total)
+        })
     }
 
     private fun updateText(total: Int) {
+        // Safely access the TextView and update its text
         view?.findViewById<TextView>(R.id.text_total)?.text =
             getString(R.string.text_total, total)
     }
 
-    private fun prepareViewModel() {
-        // Getting the ViewModel from the activity
-        val viewModel = ViewModelProvider(requireActivity()).get(TotalViewModel::class.java)
-
-        // Observe the LiveData object
-        viewModel.total.observe(viewLifecycleOwner, {
-            // Whenever the value of the LiveData object changes
-            // the updateText() is called, with the new value as the parameter
-            updateText(it)
-        })
-    }
-
     companion object {
-        fun newInstance(param1: String, param2: String) = FirstFragment()
+        // This method can be simplified if you don't need parameters
+        fun newInstance() = FirstFragment()
     }
 }
