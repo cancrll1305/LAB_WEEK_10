@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.Observer
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Prepare the ViewModel and set up UI
+        // Prepare ViewModel and UI elements
         prepareViewModel()
     }
 
@@ -27,12 +25,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun prepareViewModel() {
-        // Mengamati perubahan pada LiveData total
-        viewModel.total.observe(this, Observer { total ->
-            updateText(total)
+        viewModel.total.observe(this, {
+            updateText(it)
         })
 
-        // Mengatur click listener untuk button
         findViewById<Button>(R.id.button_increment).setOnClickListener {
             viewModel.incrementTotal()
         }
