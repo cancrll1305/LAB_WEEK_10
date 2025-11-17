@@ -15,7 +15,6 @@ class FirstFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Initialize the ViewModel
         viewModel = ViewModelProvider(requireActivity()).get(TotalViewModel::class.java)
     }
 
@@ -23,32 +22,27 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the fragment layout
         return inflater.inflate(R.layout.fragment_first, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Start observing the LiveData
         observeViewModel()
     }
 
     private fun observeViewModel() {
-        // Observe the LiveData object from the ViewModel
-        viewModel.total.observe(viewLifecycleOwner, { total ->
-            // Update the UI when the LiveData changes
-            updateText(total)
+        viewModel.total.observe(viewLifecycleOwner, { totalObject ->
+            // Update the UI with the total value (from TotalObject)
+            updateText(totalObject.value)
         })
     }
 
-    private fun updateText(total: Int) {
-        // Safely access the TextView and update its text
+    private fun updateText(value: Int) {
         view?.findViewById<TextView>(R.id.text_total)?.text =
-            getString(R.string.text_total, total)
+            getString(R.string.text_total, value)
     }
 
     companion object {
-        // This method can be simplified if you don't need parameters
         fun newInstance() = FirstFragment()
     }
 }

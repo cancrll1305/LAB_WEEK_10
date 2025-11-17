@@ -4,7 +4,6 @@ import androidx.room.*
 
 @Dao
 interface TotalDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(total: Total)
 
